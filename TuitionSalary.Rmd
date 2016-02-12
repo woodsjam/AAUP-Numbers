@@ -1,0 +1,36 @@
+---
+title: "Relationship Between Tuition and Teaching Salaries"
+author: "James Woods"
+date: "2/12/2016"
+output: pdf_document
+---
+
+
+```{r echo=FALSE}
+Sal<-read.csv("SalTuition.CSV")
+
+```
+I'm using the data from ``Preliminary Discussion of Presentation Topics'', point 12.  This is their story.
+
+```{r echo=FALSE ,warning=FALSE, message=FALSE}
+library(ggplot2)
+
+print(qplot(Tuition, Sal, data=Sal, geom='path')+geom_text(aes(label=Year),hjust=0, vjust=0)+xlab("Per Student Tuition Revenue ($)")+ylab("Per Student Salary and Benefits ($)")+geom_abline(intercept=0, slope=1)+xlim(4000,6500)+ylim(4000,6500))
+
+
+```
+The 45 degree line shows path if all tuition revenue per student was spent on instruction.  Note that it is less, but that the share is falling.
+
+But, you never compare a time series with a time series like this, they all look correlated.  
+
+You should look at change from year to year.  Here is a similar graphic.  Note that it looks like there is an inverse relationship between the changes in tuition revenue and salary expenditures per student.  In other words, when there is an increase in tuition revenue, there is a decrease in expenditures on teaching.
+
+```{r echo=FALSE,warning=FALSE, message=FALSE}
+
+Sal$TuitionDif<-c(NA,diff(Sal$Tuition))
+Sal$SalDif<-c(NA,diff(Sal$Sal))
+
+qplot(TuitionDif, SalDif, data=Sal, geom='path')+geom_text(aes(label=Year),hjust=0, vjust=0)+geom_abline(intercept=0, slope=1)+xlim(-200,500)+ylim(-200,500)+xlab("Change in per Student Tuition Revenue ($)")+ylab("Change in per Student Salary and Benefits ($)")
+```
+
+
